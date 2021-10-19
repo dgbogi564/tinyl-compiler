@@ -150,7 +150,7 @@ static int expr()
     case 'd':
     case 'e':
         return variable();
-	case '0':
+    case '0':
 	case '1':
 	case '2':
 	case '3':
