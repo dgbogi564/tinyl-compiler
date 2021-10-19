@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="WSL (38464292-49a1-4b09-b483-e32ce704b0f4)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="iLab (f6c12f45-2ec1-43f8-a7f6-45a5f7947de3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Documents/College/FALL 2021/PRIN PROG LANGUAGES/Assignments/Project1" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
