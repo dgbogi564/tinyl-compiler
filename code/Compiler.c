@@ -95,12 +95,12 @@ static int variable()
     /* YOUR CODE GOES HERE */
     int reg;
 
-    if(!is_identifier(token)) {
+    if (!is_identifier(token)) {
         ERROR("Expected identifier\n");
-        exit(EXIT_FAILURE);
-    }
+        exit(EXIT_FAILURE);    }
     reg = next_register();
     CodeGen(LOAD, reg, token, EMPTY_FIELD);
+    return reg;
 }
 
 static int expr()
@@ -116,6 +116,40 @@ static int expr()
 		CodeGen(ADD, reg, left_reg, right_reg);
 		return reg;
 		/* YOUR CODE GOES HERE */
+    case '-':
+        next_token();
+            left_reg = expr();
+            right_reg = expr();
+            reg = next_register();
+            CodeGen(SUB, reg, left_reg, right_reg);
+            return reg;
+    case '*':
+        next_token();
+            left_reg = expr();
+            right_reg = expr();
+            reg = next_register();
+            CodeGen(MUL, reg, left_reg, right_reg);
+            return reg;
+    case '|':
+        next_token();
+            left_reg = expr();
+            right_reg = expr();
+            reg = next_register();
+            CodeGen(OR, reg, left_reg, right_reg);
+            return reg;
+    case '^':
+        next_token();
+            left_reg = expr();
+            right_reg = expr();
+            reg = next_register();
+            CodeGen(XOR, reg, left_reg, right_reg);
+            return reg;
+    case 'a':
+    case 'b':
+    case 'c':
+    case 'd':
+    case 'e':
+        return variable();
 	case '0':
 	case '1':
 	case '2':
@@ -155,6 +189,16 @@ static void assign()
 static void read()
 {
 	/* YOUR CODE GOES HERE */
+    if (token != '?') {
+        ERROR("Expected read statement\n");
+    }
+    next_token();
+    if (!is_identifier(token)) {
+        ERROR("Expected identifier\n");
+        exit(EXIT_FAILURE);
+    }
+    CodeGen(READ, token, EMPTY_FIELD, EMPTY_FIELD);
+    next_token();
 }
 
 static void print()
@@ -176,16 +220,43 @@ static void print()
 static void stmt()
 {
 	/* YOUR CODE GOES HERE */
+    if (is_identifier(token)) {
+        return assign();
+    } else if (token == '?') {
+        return read();
+    } else if (token == '#') {
+        return print();
+    } else {
+        ERROR("Expected identifier, read statement, or print statement\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 static void morestmts()
 {
-	/* YOUR CODE GOES HERE */
+    /* YOUR CODE GOES HERE */
+	if (token == ';') {
+        next_token();
+        if (is_identifier(token) || token == '?' || token == '#') {
+            stmtlist();
+        }
+    } else {
+        ERROR("Expected statement list\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 static void stmtlist()
 {
 	/* YOUR CODE GOES HERE */
+    if (is_identifier(token) || token == '?' || token == '#') {
+        stmt();
+    } else if(token == ';') {
+        morestmts();
+    } else {
+        ERROR("Expected statement(s)\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 static void program()
