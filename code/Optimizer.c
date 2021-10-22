@@ -32,13 +32,6 @@ identifierList_t * idl_create() {
 
 void id_add(identifierList_t *id_list, int v) {
     identifier_t *id = id_create(v), *temp = id_list->head;
-    /* check for dupes */
-    while(temp != NULL) {
-        if(temp->v == v) {
-            return;
-        }
-        temp = temp->next;
-    }
     /* insert into id_list */
     if(!id_list->size) {
         id_list->head = id;
@@ -91,6 +84,8 @@ int is_critical(identifierList_t *id_list, Instruction *instr) {
     int loads_to = instr->field1;
     while(id != NULL) {
         if(id->v == loads_to) {
+            id_remove(id_list, loads_to);
+            instr->critical = 1;
             return 1;
         }
         id = id->next;
@@ -135,7 +130,6 @@ int main()
     while(instr != NULL) {
         if(instr->opcode == STORE && is_critical(id_list, instr)) {
             id_add(id_list, instr->field2);
-            instr->critical = 1;
         }
         instr = instr->next;
     }
@@ -149,7 +143,6 @@ int main()
             continue;
         }
         if(is_critical(id_list, instr)) {
-            instr->critical = 1;
             switch(instr->opcode) {
                 case ADD:
                 case SUB:
