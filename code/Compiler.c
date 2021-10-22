@@ -100,6 +100,7 @@ static int variable()
         exit(EXIT_FAILURE);    }
     reg = next_register();
     CodeGen(LOAD, reg, token, EMPTY_FIELD);
+    next_token();
     return reg;
 }
 
@@ -118,32 +119,32 @@ static int expr()
 		/* YOUR CODE GOES HERE */
     case '-':
         next_token();
-            left_reg = expr();
-            right_reg = expr();
-            reg = next_register();
-            CodeGen(SUB, reg, left_reg, right_reg);
-            return reg;
+        left_reg = expr();
+        right_reg = expr();
+        reg = next_register();
+        CodeGen(SUB, reg, left_reg, right_reg);
+        return reg;
     case '*':
         next_token();
-            left_reg = expr();
-            right_reg = expr();
-            reg = next_register();
-            CodeGen(MUL, reg, left_reg, right_reg);
-            return reg;
+        left_reg = expr();
+        right_reg = expr();
+        reg = next_register();
+        CodeGen(MUL, reg, left_reg, right_reg);
+        return reg;
     case '|':
         next_token();
-            left_reg = expr();
-            right_reg = expr();
-            reg = next_register();
-            CodeGen(OR, reg, left_reg, right_reg);
-            return reg;
+        left_reg = expr();
+        right_reg = expr();
+        reg = next_register();
+        CodeGen(OR, reg, left_reg, right_reg);
+        return reg;
     case '^':
         next_token();
-            left_reg = expr();
-            right_reg = expr();
-            reg = next_register();
-            CodeGen(XOR, reg, left_reg, right_reg);
-            return reg;
+        left_reg = expr();
+        right_reg = expr();
+        reg = next_register();
+        CodeGen(XOR, reg, left_reg, right_reg);
+        return reg;
     case 'a':
     case 'b':
     case 'c':
@@ -240,9 +241,6 @@ static void morestmts()
         if (is_identifier(token) || token == '?' || token == '#') {
             stmtlist();
         }
-    } else {
-        ERROR("Expected statement list\n");
-        exit(EXIT_FAILURE);
     }
 }
 
@@ -251,7 +249,6 @@ static void stmtlist()
 	/* YOUR CODE GOES HERE */
     if (is_identifier(token) || token == '?' || token == '#') {
         stmt();
-    } else if(token == ';') {
         morestmts();
     } else {
         ERROR("Expected statement(s)\n");
